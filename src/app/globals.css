@@ -3,6 +3,7 @@
 @theme {
   --color-brand-bg: #F5F5F5;
   --color-brand-text: #011740;
+  --color-brand-primary: #011740;
   --color-brand-emerald: #011740;
   --color-brand-emerald-hover: #02143C;
   --font-heading: var(--font-montserrat), sans-serif;
