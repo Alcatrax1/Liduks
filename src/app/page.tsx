@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
@@ -22,14 +22,6 @@ const pulseAnimation = {
 export default function Home() {
   const scrollContainerRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
@@ -39,8 +31,6 @@ export default function Home() {
   const requestRef = useRef<number | null>(null);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // Only drive video via scroll on desktop
-    if (isMobile) return;
     if (requestRef.current !== null) {
       cancelAnimationFrame(requestRef.current);
     }
@@ -53,30 +43,12 @@ export default function Home() {
 
   return (
     <div className="w-full flex-1">
-      {/* ----------------- HERO SECTION ----------------- */}
-      {/* Mobile: normal section (no 300vh scroll trick). Desktop: scroll-driven video */}
-      <section ref={scrollContainerRef} className="relative w-full h-auto md:h-[300vh] bg-white">
-        <div className="md:sticky md:top-0 w-full md:h-screen overflow-hidden bg-white flex flex-col md:block">
+      {/* ----------------- HERO SECTION (Scroll-driven video) ----------------- */}
+      <section ref={scrollContainerRef} className="relative w-full h-[300vh] bg-white">
+        <div className="sticky top-0 w-full h-screen overflow-hidden bg-white flex flex-col md:block">
           
-          {/* --- MOBILE: Autoplay looping video --- */}
-          <div className="relative w-full md:hidden z-0 overflow-hidden flex items-end justify-center shrink-0">
-             <video
-               autoPlay
-               loop
-               muted
-               playsInline
-               preload="auto"
-               poster="/hero_poster.jpg"
-               src="/hero_video.mp4"
-               className="w-full h-auto object-contain"
-               style={{ pointerEvents: 'none' }}
-             />
-             {/* Fade overlay - only bottom edge for text blend */}
-             <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-white to-transparent pointer-events-none" />
-          </div>
-
-          {/* --- DESKTOP: Scroll-driven video --- */}
-          <div className="hidden md:absolute md:inset-y-0 md:inset-x-auto md:right-0 md:w-[65vw] md:h-full z-0 overflow-hidden md:flex items-center justify-end">
+          {/* Scroll-driven video */}
+          <div className="relative w-full h-[50vh] md:absolute md:inset-y-0 md:right-0 md:w-[65vw] md:h-full z-0 overflow-hidden flex items-center justify-center md:justify-end shrink-0">
              <video
                ref={videoRef}
                src="/hero_video.mp4"
@@ -84,15 +56,16 @@ export default function Home() {
                muted
                preload="auto"
                poster="/hero_poster.jpg"
-               className="w-full h-full object-contain object-right"
+               className="w-full h-full object-contain object-center md:object-right"
                style={{ pointerEvents: 'none' }}
              />
-             {/* Fade Overlay */}
-             <div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none" />
+             {/* Fade Overlays */}
+             <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent md:bg-none pointer-events-none" />
+             <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none" />
           </div>
 
           {/* Content overlay */}
-          <div className="relative z-10 w-full flex-1 md:absolute md:inset-0 max-w-7xl mx-auto px-6 sm:px-8 flex flex-col justify-start md:justify-center pt-6 md:pt-0 pb-16 md:pb-0">
+          <div className="relative z-10 w-full flex-1 md:absolute md:inset-0 max-w-7xl mx-auto px-6 sm:px-8 flex flex-col justify-start md:justify-center pt-2 md:pt-0 pb-20 md:pb-0">
             
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
