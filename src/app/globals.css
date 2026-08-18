@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #F5F5F5;
+  --color-brand-text: #011740;
+  --color-brand-emerald: #011740;
+  --color-brand-emerald-hover: #02143C;
+  --font-heading: var(--font-montserrat), sans-serif;
+  --font-body: var(--font-open-sans), sans-serif;
+}
+
+:root {
+  --background: #F5F5F5;
+  --foreground: #1A1A1B;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Taste-Skill Liquid Glass */
+@utility liquid-glass {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 20px 40px -15px rgba(0,0,0,0.05);
+}
+
+/* Taste-Skill Subtle Card (Bento v2) */
+@utility bento-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.03);
+  border-radius: 2.5rem;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 26, 27, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 26, 27, 0.4);
+}
