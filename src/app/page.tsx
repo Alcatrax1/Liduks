@@ -58,23 +58,19 @@ export default function Home() {
       <section ref={scrollContainerRef} className="relative w-full h-auto md:h-[300vh] bg-white">
         <div className="md:sticky md:top-0 w-full md:h-screen overflow-hidden bg-white flex flex-col md:block">
           
-          {/* --- MOBILE: Static poster image --- */}
+          {/* --- MOBILE: Autoplay looping video --- */}
           <div className="relative w-full md:hidden z-0 overflow-hidden flex items-end justify-center shrink-0">
-             <motion.div
-               initial={{ opacity: 0, scale: 0.95 }}
-               animate={{ opacity: 1, scale: 1 }}
-               transition={{ duration: 0.8, ease: "easeOut" }}
-               className="w-full"
-             >
-               <Image
-                 src="/hero_poster.jpg"
-                 alt="Prédio Liduks - Comunicação Visual Completa"
-                 width={1440}
-                 height={1440}
-                 priority
-                 className="w-full h-auto object-contain"
-               />
-             </motion.div>
+             <video
+               autoPlay
+               loop
+               muted
+               playsInline
+               preload="auto"
+               poster="/hero_poster.jpg"
+               src="/hero_video.mp4"
+               className="w-full h-auto object-contain"
+               style={{ pointerEvents: 'none' }}
+             />
              {/* Fade overlay - only bottom edge for text blend */}
              <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-white to-transparent pointer-events-none" />
           </div>
