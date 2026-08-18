@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent, useMotionValue } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { LiquidGlassContainer } from "@/components/ui/LiquidGlassContainer";
+import { ScrollCanvas } from "@/components/ui/ScrollCanvas";
 import { CheckCircle, Medal, RocketLaunch, Handshake } from "@phosphor-icons/react/dist/ssr";
 
 // Perpetual Animation Variants (taste-skill requirements)
@@ -22,6 +23,7 @@ const pulseAnimation = {
 export default function Home() {
   const scrollContainerRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
@@ -31,6 +33,10 @@ export default function Home() {
   const requestRef = useRef<number | null>(null);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    // Update canvas scroll progress (for mobile)
+    setScrollProgress(latest);
+
+    // Update video currentTime (for desktop)
     if (requestRef.current !== null) {
       cancelAnimationFrame(requestRef.current);
     }
@@ -43,19 +49,15 @@ export default function Home() {
 
   return (
     <div className="w-full flex-1">
-      {/* ----------------- HERO SECTION ----------------- */}
-      <section ref={scrollContainerRef} className="relative w-full h-auto md:h-[300vh] bg-white">
-        <div className="md:sticky md:top-0 w-full md:h-screen overflow-hidden bg-white flex flex-col md:block">
+      {/* ----------------- HERO SECTION (Scroll-driven animation) ----------------- */}
+      <section ref={scrollContainerRef} className="relative w-full h-[300vh] bg-white">
+        <div className="sticky top-0 w-full h-screen overflow-hidden bg-white flex flex-col md:block">
           
-          {/* --- MOBILE: Static poster image (iOS Safari não suporta scroll-driven video) --- */}
-          <div className="relative w-full md:hidden z-0 overflow-hidden shrink-0">
-             <Image
-               src="/hero_poster.jpg"
-               alt="Prédio Liduks - Comunicação Visual Completa"
-               width={1440}
-               height={1440}
-               priority
-               className="w-full h-auto object-contain"
+          {/* --- MOBILE: Canvas scroll animation (funciona no iOS Safari) --- */}
+          <div className="relative w-full h-[50vh] md:hidden z-0 overflow-hidden flex items-center justify-center shrink-0">
+             <ScrollCanvas
+               scrollProgress={scrollProgress}
+               className="w-full h-full object-contain"
              />
              {/* Suave fade na borda inferior */}
              <div className="absolute bottom-0 left-0 right-0 h-[20%] bg-gradient-to-t from-white to-transparent pointer-events-none" />
@@ -77,7 +79,7 @@ export default function Home() {
           </div>
 
           {/* Content overlay */}
-          <div className="relative z-10 w-full flex-1 md:absolute md:inset-0 max-w-7xl mx-auto px-6 sm:px-8 flex flex-col justify-start md:justify-center pt-4 md:pt-0 pb-16 md:pb-0">
+          <div className="relative z-10 w-full flex-1 md:absolute md:inset-0 max-w-7xl mx-auto px-6 sm:px-8 flex flex-col justify-start md:justify-center pt-2 md:pt-0 pb-20 md:pb-0">
             
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
