@@ -43,12 +43,26 @@ export default function Home() {
 
   return (
     <div className="w-full flex-1">
-      {/* ----------------- HERO SECTION (Scroll-driven video) ----------------- */}
-      <section ref={scrollContainerRef} className="relative w-full h-[300vh] bg-white">
-        <div className="sticky top-0 w-full h-screen overflow-hidden bg-white flex flex-col md:block">
+      {/* ----------------- HERO SECTION ----------------- */}
+      <section ref={scrollContainerRef} className="relative w-full h-auto md:h-[300vh] bg-white">
+        <div className="md:sticky md:top-0 w-full md:h-screen overflow-hidden bg-white flex flex-col md:block">
           
-          {/* Scroll-driven video */}
-          <div className="relative w-full h-[50vh] md:absolute md:inset-y-0 md:right-0 md:w-[65vw] md:h-full z-0 overflow-hidden flex items-center justify-center md:justify-end shrink-0">
+          {/* --- MOBILE: Static poster image (iOS Safari não suporta scroll-driven video) --- */}
+          <div className="relative w-full md:hidden z-0 overflow-hidden shrink-0">
+             <Image
+               src="/hero_poster.jpg"
+               alt="Prédio Liduks - Comunicação Visual Completa"
+               width={1440}
+               height={1440}
+               priority
+               className="w-full h-auto object-contain"
+             />
+             {/* Suave fade na borda inferior */}
+             <div className="absolute bottom-0 left-0 right-0 h-[20%] bg-gradient-to-t from-white to-transparent pointer-events-none" />
+          </div>
+
+          {/* --- DESKTOP: Scroll-driven video --- */}
+          <div className="hidden md:absolute md:inset-y-0 md:right-0 md:w-[65vw] md:h-full z-0 overflow-hidden md:flex items-center justify-end">
              <video
                ref={videoRef}
                src="/hero_video.mp4"
@@ -56,16 +70,14 @@ export default function Home() {
                muted
                preload="auto"
                poster="/hero_poster.jpg"
-               className="w-full h-full object-contain object-center md:object-right"
+               className="w-full h-full object-contain object-right"
                style={{ pointerEvents: 'none' }}
              />
-             {/* Fade Overlays */}
-             <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent md:bg-none pointer-events-none" />
-             <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none" />
+             <div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none" />
           </div>
 
           {/* Content overlay */}
-          <div className="relative z-10 w-full flex-1 md:absolute md:inset-0 max-w-7xl mx-auto px-6 sm:px-8 flex flex-col justify-start md:justify-center pt-2 md:pt-0 pb-20 md:pb-0">
+          <div className="relative z-10 w-full flex-1 md:absolute md:inset-0 max-w-7xl mx-auto px-6 sm:px-8 flex flex-col justify-start md:justify-center pt-4 md:pt-0 pb-16 md:pb-0">
             
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
